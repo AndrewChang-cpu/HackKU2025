@@ -40,7 +40,7 @@ export default function RootLayout() {
       <StatusBar style="auto" />
     </ThemeProvider>
     */
-	<View className="flex-1">
+	<View className="flex-1 bg-background">
 		<Slot/>
 	</View>
   );

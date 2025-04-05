@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+    --sixty: #F5FCFD;
+    --thirty: #D1FCEC;
+    --ten: #5BD9C2;
+}
+
+.text
