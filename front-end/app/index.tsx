@@ -10,14 +10,14 @@ const Stack = createNativeStackNavigator();
 export default function Index() {
     const router = useRouter();
 
-    return (
-        // <NavigationContainer>
-            <Stack.Navigator initialRouteName="Home">
-                <Stack.Screen name="Home" component={HomeScreen} />
-                <Stack.Screen name="CameraScreen" component={CameraScreen} />
-            </Stack.Navigator>
-        // </NavigationContainer>
-    );
+    // return (
+    //     // <NavigationContainer>
+    //         <Stack.Navigator initialRouteName="Home">
+    //             <Stack.Screen name="Home" component={HomeScreen} />
+    //             <Stack.Screen name="CameraScreen" component={CameraScreen} />
+    //         </Stack.Navigator>
+    //     // </NavigationContainer>
+    // );
     return (
         <View className="flex-1 bg-cyan-300">
             <View className="flex-1 justify-center items-center">
