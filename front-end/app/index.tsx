@@ -1,39 +1,26 @@
-import { useState, useEffect } from 'react';
-import { Button, View, Text } from 'react-native-ui-lib';
+import { View, Text, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeScreen from './(tabs)/HomeScreen';
-import CameraScreen from './(tabs)/CameraScreen';
-
-const Stack = createNativeStackNavigator();
 
 export default function Index() {
-    const router = useRouter();
+  const router = useRouter();
 
-    // return (
-    //     // <NavigationContainer>
-    //         <Stack.Navigator initialRouteName="Home">
-    //             <Stack.Screen name="Home" component={HomeScreen} />
-    //             <Stack.Screen name="CameraScreen" component={CameraScreen} />
-    //         </Stack.Navigator>
-    //     // </NavigationContainer>
-    // );
-    return (
-        <View className="flex-1 bg-cyan-300">
-            <View className="flex-1 justify-center items-center">
-                <Text>Welcome Screen</Text>
-            </View>
-            <View className='absolute w-full h-full px-[25px] pb-[50px]'>
-                <View className="flex-1 justify-end">
-                    <Button
-                        label={'Get Started'}
-                        labelStyle={{ fontWeight: 'bold'}}
-                        onPress={() => {router.push('/login')}}
-                        enableShadow
-                        animateTo='left'
-                    />
-                </View>
-            </View>
-        </View>
-    )
+  return (
+    <View className="flex-1 bg-[#e3fcef] items-center justify-center px-6">
+      <Text className="text-3xl font-semibold mb-12">Welcome!</Text>
+
+      <Pressable
+        className="w-full py-3 px-6 mb-4 bg-white rounded-full border border-black shadow-lg items-center"
+        onPress={() => router.push('/login')}
+      >
+        <Text className="text-lg">Log in</Text>
+      </Pressable>
+
+      <Pressable
+        className="w-full py-3 px-6 bg-white rounded-full border border-black shadow-lg items-center"
+        onPress={() => router.push('/signup')}
+      >
+        <Text className="text-lg">Sign up</Text>
+      </Pressable>
+    </View>
+  );
 }
