@@ -14,6 +14,7 @@ export default function Index() {
                 <View className="flex-1 justify-end">
                     <Button
                         label={'Get Started'}
+                        onPress={() => {router.push('/login')}}
                         enableShadow
                         animateTo='left'
                     />
