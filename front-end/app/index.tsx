@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Button, View, Text } from 'react-native-ui-lib';
+import { useRouter } from 'expo-router';
 
 export default function Index() {
+    const router = useRouter();
+
     return (
         <View className="flex-1 bg-cyan-300">
             <View className="flex-1 justify-center items-center">
