@@ -1,9 +1,11 @@
 import { View, Text, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
+import HomeScreen from './(tabs)/home';
 
 export default function Index() {
   const router = useRouter();
 
+  // return <HomeScreen/>
   return (
     <View className="flex-1 bg-[#e3fcef] items-center justify-center px-6">
       <Text className="text-3xl font-semibold mb-12">Welcome!</Text>
@@ -17,7 +19,7 @@ export default function Index() {
 
       <Pressable
         className="w-full py-3 px-6 bg-white rounded-full border border-black shadow-lg items-center"
-        onPress={() => router.push('/signup')}
+        onPress={() => router.push('/home')}
       >
         <Text className="text-lg">Sign up</Text>
       </Pressable>

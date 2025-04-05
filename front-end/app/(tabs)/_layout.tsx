@@ -1,45 +1,62 @@
 import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
-
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { Ionicons } from '@expo/vector-icons';
+import { Text, View } from 'react-native';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+      screenOptions={({ route }) => ({
         headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}>
-      <Tabs.Screen
-        name="home"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="profile"
-        options={{
-          title: 'Profile',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        }}
-      />
+        tabBarStyle: {
+          backgroundColor: 'white',
+          height: 70,
+          paddingBottom: 8,
+          paddingTop: 8,
+          borderTopWidth: 1,
+          borderColor: '#ccc',
+        },
+        tabBarShowLabel: false,
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName = 'home-outline';
+          let label = 'Tab';
+        
+          if (route.name === 'home') {
+            iconName = 'home-outline';
+            label = 'Home';
+          } else if (route.name === 'CameraScreen') {
+            iconName = 'camera-outline';
+            label = 'Scan';
+          } else if (route.name === 'profile') {
+            iconName = 'person-outline';
+            label = 'Profile';
+          }
+        
+          return (
+            <View style={{ alignItems: 'center', justifyContent: 'center', width: 60 }}>
+              <Ionicons
+                name={iconName}
+                size={22}
+                color={focused ? 'black' : '#aaa'}
+              />
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: focused ? 'black' : '#aaa',
+                  marginTop: 2,
+                }}
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
+                {label}
+              </Text>
+            </View>
+          );
+        },        
+      })}
+    >
+      <Tabs.Screen name="home" />
+      <Tabs.Screen name="CameraScreen" />
+      <Tabs.Screen name="profile" />
     </Tabs>
   );
 }
