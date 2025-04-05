@@ -12,7 +12,7 @@ export default function LoginScreen() {
             <View className="flex-1 justify-center items-center">
                 <Text>Login Screen</Text>
                 <TextField
-                    placeholder="Floating"
+                    placeholder="Email"
                     floatingPlaceholder
                     floatOnFocus      // The placeholder floats when focused or filled
                     fieldStyle={{
@@ -20,7 +20,24 @@ export default function LoginScreen() {
                         borderBottomColor: emailFocus ? '#6200EE' : '#ccc',
                     }}
                     floatingPlaceholderStyle={{ color: '#aaa' }}
-                    containerStyle={{ flex: 1, marginRight: 8 }}
+                    containerStyle={{ 
+                        //marginRight: 0
+                        width: 300
+                    }}
+                />
+                <TextField
+                    placeholder="Email"
+                    floatingPlaceholder
+                    floatOnFocus      // The placeholder floats when focused or filled
+                    fieldStyle={{
+                        borderBottomWidth: 1,
+                        borderBottomColor: emailFocus ? '#6200EE' : '#ccc',
+                    }}
+                    floatingPlaceholderStyle={{ color: '#aaa' }}
+                    containerStyle={{ 
+                        //marginRight: 0
+                        width: 300
+                    }}
                 />
             </View>
         </View>
