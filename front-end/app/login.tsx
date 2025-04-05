@@ -5,14 +5,14 @@ export default function LoginScreen() {
         <View className="flex-1 bg-cyan-300">
             <View className="flex-1 justify-center items-center">
                 <Text>Login Screen</Text>
-            </View>
-            <View className='absolute w-full h-full px-[25px] pb-[50px]'>
-                <View className="flex-1 justify-end">
-                    <Button
+                <Button
                         label={'Login'}
                         enableShadow
                         animateTo='left'
-                    />
+                />
+            </View>
+            <View className='absolute w-full h-full px-[25px] pb-[50px]'>
+                <View className="flex-1 justify-end">
                 </View>
             </View>
         </View>
