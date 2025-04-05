@@ -9,7 +9,7 @@ export default function LoginScreen() {
             <View className='absolute w-full h-full px-[25px] pb-[50px]'>
                 <View className="flex-1 justify-end">
                     <Button
-                        label={'Get Started'}
+                        label={'Login'}
                         enableShadow
                         animateTo='left'
                     />
