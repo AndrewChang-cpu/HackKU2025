@@ -1,12 +1,13 @@
 import { TouchableOpacity } from 'react-native';
 import { View, Text, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
-import HomeScreen from './(tabs)/home';
+// import HomeScreen from './(tabs)/home';
+import AddMedicationScreen from './AddMedicationScreen';
 
 export default function Index() {
   const router = useRouter();
 
-  // return <HomeScreen/>
+  return <AddMedicationScreen/>
   return (
     <View className="flex-1 bg-[#e3fcef] items-center justify-center px-6">
       <Text className="text-3xl font-semibold mb-12">Welcome!</Text>
