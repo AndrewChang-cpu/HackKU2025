@@ -23,6 +23,12 @@ dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 
 export default function AddMedicationScreen() {
+  // const openai = async() => {
+    
+  // }
+  // openai();
+
+
   const { user } = useAuth();
   const router = useRouter();
   const params = useLocalSearchParams(); // Replace useRoute with useLocalSearchParams
@@ -88,6 +94,38 @@ export default function AddMedicationScreen() {
 
     return summary;
   };
+
+
+  async function getCombinedMedicationsAndAllergies(): Promise<string> {
+    try {
+      const userId = user?.id;
+      // Fetch medications
+      const { data: medications, error: medError } = await supabase
+        .from('medications')
+        .select('name')
+        .eq('user_id', userId);
+  
+      if (medError) throw medError;
+  
+      // Fetch allergies
+      const { data: userData, error: userError } = await supabase
+        .from('users')
+        .select('allergies')
+        .eq('id', userId)
+        .single();
+  
+      if (userError) throw userError;
+  
+      const medNames = medications?.map((m) => m.name) ?? [];
+      const allergyList = userData?.allergies ?? []; // Assuming allergies is a string[] or null
+  
+      return [...medNames, ...allergyList].filter(Boolean).join(', ');
+    } catch (err) {
+      console.error('Error combining medications and allergies:', err);
+      return '';
+    }
+  }
+
 
   const handleCancel = () => {
     router.push("/(tabs)/profile");
@@ -167,6 +205,88 @@ export default function AddMedicationScreen() {
       alert("Failed to save medication.");
     } else {
       console.log("Medication saved successfully.");
+      
+      // HERE
+      try {
+        let prompt = `here's a list of medications and allergies. give me a concise list of any pairs that pose a conflict--no other output. the output list should have two of the mentioned medications/allergies separated by a comma and no spaces; the pairs should be separated by lines. output "None" if there are no conflicts: `
+        prompt += await getCombinedMedicationsAndAllergies()
+        console.log('Prompt:', prompt);
+
+        const chatResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${"API_KEY"}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: 'gpt-4o',
+            messages: [
+              {
+                role: 'system',
+                content: 'You are a helpful assistant that suggests possible interactions between medications.',
+              },
+              {
+                role: 'user',
+                content: prompt,
+              },
+            ],
+          }),
+        });
+  
+        const json = await chatResponse.json();
+        const responseText = json.choices?.[0]?.message?.content || '';
+        console.log('ChatGPT response:', responseText, json);
+        const interactions: [string, string][] = responseText
+          .split('\n')
+          .filter(line => line.includes(','))
+          .map(line => {
+            const [med1, med2] = line.split(',').map(s => s.trim());
+            return [med1, med2] as [string, string];
+          });
+  
+        console.log('Parsed interactions:', interactions);
+        
+        const conflictMap: Record<string, Set<string>> = {};
+
+      // Step 1: Create a map of conflicts
+      for (const [a, b] of interactions) {
+        if (!conflictMap[a]) conflictMap[a] = new Set();
+        if (!conflictMap[b]) conflictMap[b] = new Set();
+        conflictMap[a].add(b);
+        conflictMap[b].add(a);
+      }
+
+      // Step 2: Fetch all user medications
+      const { data: meds, error } = await supabase
+        .from('medications')
+        .select('id, name')
+        .eq('user_id', user.id);
+
+      if (error) {
+        console.error('Error fetching medications:', error);
+        return;
+      }
+
+      // Step 3: Loop through and update each medication with its conflicts
+      for (const med of meds) {
+        const conflicts = conflictMap[med.name];
+
+        if (conflicts) {
+          const { error: updateError } = await supabase
+            .from('medications')
+            .update({ conflicting_medication: Array.from(conflicts) })
+            .eq('id', med.id);
+
+          if (updateError) {
+            console.error(`Failed to update ${med.name}:`, updateError);
+          }
+        }
+      }
+      } catch (e) {
+        console.error('Error calling ChatGPT:', e);
+      }
+
+
       router.push("/(tabs)/profile");
     }
   };
