@@ -11,7 +11,7 @@ interface ProfileItemProps {
 export default function ProfileItem({ title, icon, onPress }: ProfileItemProps) {
     return (
         <TouchableOpacity
-            className='flex flex-row justify-between py-[10px]'
+            className='flex flex-row justify-between py-[10px] bg-white'
             onPress={onPress}
         >
             <View className='flex flex-row gap-2 justify-center items-center'>
