@@ -98,8 +98,33 @@ export default function DashboardScreen() {
 
   if (loading) {
     return (
-      <View className="flex-1 justify-center items-center">
-        <Text>Loading medications...</Text>
+      <View className="flex-1 bg-[#e3fcef] px-4 pt-16">
+        {/* Skeleton header */}
+        <View className="absolute z-20 top-[65px] left-[50px] right-6 py-3 px-6">
+          <View className="h-8 w-1/2 bg-gray-300 rounded" />
+        </View>
+  
+        {/* Skeleton for the upcoming medication card */}
+        <View className="mb-6 bg-white rounded-md p-4 shadow-md">
+          <View className="h-6 bg-gray-300 rounded w-3/4 mb-2" />
+          <View className="h-6 bg-gray-300 rounded w-1/2 mb-2" />
+          <View className="h-4 bg-gray-300 rounded w-1/3" />
+        </View>
+  
+        {/* Skeleton for medication list */}
+        <ScrollView className="mb-4">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <View key={i} className="mb-3 bg-white rounded-md p-4 shadow-md">
+              <View className="flex-row items-center">
+                <View className="w-[100px] h-6 bg-gray-300 rounded mr-2" />
+                <View className="flex-1">
+                  <View className="h-6 bg-gray-300 rounded mb-2" />
+                  <View className="h-6 bg-gray-300 rounded" />
+                </View>
+              </View>
+            </View>
+          ))}
+        </ScrollView>
       </View>
     );
   }
@@ -140,32 +165,44 @@ export default function DashboardScreen() {
       <Text className="text-xl font-bold mb-2">My Medications</Text>
 
       <ScrollView className="mb-4">
-        {todaysMeds.map((med) => (
-          <TouchableOpacity
-            key={med.id}
-            onPress={() => handleToggleMedication(med.id)}
-            className={`mb-3 rounded-md ${med.taken ? 'bg-gray-300' : 'bg-white shadow-md'}`}
-          >
-            <View className="flex-row items-center p-4">
-              {/* Increased width of the left view */}
-              <View className="w-[100px] items-center pr-2">
-                <Text className="text-xl font-bold">
-                  {timeToDate(med.time).format('h:mm A')}
-                </Text>
-              </View>
-              <View className="w-[1px] bg-gray-300 h-full mx-2" />
-              <View className="flex-1">
-                <Text className="text-base font-bold">{med.name}</Text>
-                <Text className="text-sm text-gray-700">{med.dosage}</Text>
-                {/* <Text className="text-xs text-gray-500 mb-1">NDC: {med.ndc}</Text> */}
-                {/* <Text className="text-sm text-gray-600">{med.description}</Text> */}
-                {med.taken && (
-                  <Text className="text-green-700 font-bold mt-1">Taken</Text>
-                )}
-              </View>
-            </View>
-          </TouchableOpacity>
-        ))}
+      {todaysMeds.map((med) => (
+  <TouchableOpacity
+    key={med.id}
+    onPress={() => handleToggleMedication(med.id)}
+    className={`mb-3 rounded-md ${med.taken ? 'bg-gray-300' : 'bg-white shadow-md'}`}
+  >
+    <View className="flex-row items-center p-4">
+      {/* Time column */}
+      <View className="w-[100px] items-center pr-2">
+        <Text className="text-xl font-bold">
+          {timeToDate(med.time).format('h:mm A')}
+        </Text>
+      </View>
+      <View className="w-[1px] bg-gray-300 h-full mx-2" />
+      {/* Main info and conflict info in a row */}
+      <View className="flex-1 flex-row justify-between">
+        {/* Left: Medication details */}
+        <View className="flex-1">
+          <Text className="text-base font-bold">{med.name}</Text>
+          <Text className="text-sm text-gray-700">{med.dosage}</Text>
+          {med.taken && (
+            <Text className="text-green-700 font-bold mt-1">Taken</Text>
+          )}
+        </View>
+        {/* Right: Conflicting medicine info */}
+        {console.log(med.conflicting_medication)}
+        {med.conflicting_medication && (
+          <View className="ml-4 items-end">
+            <Text className="text-sm font-bold text-red-600">Conflicts:</Text>
+            <Text className="text-xs text-red-600">
+              {med.conflicting_medication.join(', ')}
+            </Text>
+          </View>
+        )}
+      </View>
+    </View>
+  </TouchableOpacity>
+))}
       </ScrollView>
     </View>
   );

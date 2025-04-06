@@ -50,8 +50,8 @@ export default function ProfileScreen() {
         <ProfileItem 
           title="Logout"
           icon="exit-outline"
-          onPress={() => {router.push('/profile/documents')}}
-          />
+          onPress={() => {}}
+        />
       </View>
     </SafeAreaView>
   );
