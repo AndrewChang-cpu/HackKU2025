@@ -47,6 +47,12 @@ export default function ProfileStackLayout() {
                     headerShown: false,
                 }}
             />
+            <Stack.Screen 
+                name='Frequency'
+                options={{
+                    headerShown: false,
+                }}
+            />
         </Stack>
     );
 }
