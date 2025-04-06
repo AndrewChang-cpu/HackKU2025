@@ -115,7 +115,7 @@ export default function Frequency() {
                     onPress={() => toggleDay(i)}
                     className={`w-9 h-9 items-center justify-center rounded-full ${
                       selectedDays.includes(i)
-                        ? "bg-green-600"
+                        ? "bg-[#5BD9C2]"
                         : "bg-white border border-gray-300"
                     }`}
                   >
