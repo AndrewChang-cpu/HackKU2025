@@ -1,4 +1,5 @@
 // app/(tabs)/profile/_layout.tsx
+import { View } from 'react-native';
 import { Stack } from "expo-router";
 
 export default function ProfileStackLayout() {
