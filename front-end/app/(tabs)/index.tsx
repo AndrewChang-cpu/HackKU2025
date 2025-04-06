@@ -147,8 +147,8 @@ export default function DashboardScreen() {
               <View className="flex-1">
                 <Text className="text-base font-bold">{med.name}</Text>
                 <Text className="text-sm text-gray-700">{med.dosage}</Text>
-                <Text className="text-xs text-gray-500 mb-1">NDC: {med.ndc}</Text>
-                <Text className="text-sm text-gray-600">{med.description}</Text>
+                {/* <Text className="text-xs text-gray-500 mb-1">NDC: {med.ndc}</Text> */}
+                {/* <Text className="text-sm text-gray-600">{med.description}</Text> */}
                 {med.taken && (
                   <Text className="text-green-700 font-bold mt-1">Taken</Text>
                 )}

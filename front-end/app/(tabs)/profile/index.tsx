@@ -9,12 +9,12 @@ export default function ProfileScreen() {
             <Text className='text-[48px]'>Profile</Text>
             <View className='flex flex-col gap-[50px] w-full bg-white'>
                 <ProfileItem 
-                    title='Medical questions'
+                    title='Medications'
                     icon='document-text-outline'
-                    onPress={() => {router.push('/(tabs)/profile/AddMedicationScreen')}}
+                    onPress={() => {router.push('/(tabs)/profile/AllMedicationsScreen')}}
                 />
                 <ProfileItem 
-                    title='Update allergens'
+                    title='Allergens'
                     icon='document-text-outline'
                     onPress={() => {router.push('/profile/allergens')}}
                 />
