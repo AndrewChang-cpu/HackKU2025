@@ -108,7 +108,7 @@ export default function DashboardScreen() {
   const todaysMeds = getTodaysMedications();
 
   return (
-    <View className="flex-1 bg-[#e3fcef] px-4 pt-8">
+    <View className="flex-1 bg-[#e3fcef] px-4 pt-16">
       <Text className="text-3xl font-bold mb-4">Hi {name}!</Text>
 
       {nextMed ? (

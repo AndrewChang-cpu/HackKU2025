@@ -16,6 +16,12 @@ export default function ProfileStackLayout() {
                     headerShown: false,
                 }}
             />
+            <Stack.Screen 
+                name='AddMedicationScreen'
+                options={{
+                    headerShown: false,
+                }}
+            />
         </Stack>
     );
 }

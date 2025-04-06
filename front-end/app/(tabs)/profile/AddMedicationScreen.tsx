@@ -5,7 +5,12 @@ import {
   TextInput,
   TouchableOpacity,
   Pressable,
-  Platform } from "react-native";
+    Platform,
+    KeyboardAvoidingView,
+    Keyboard,
+    ScrollView,
+    TouchableWithoutFeedback
+  } from "react-native";
 import { useRouter, useLocalSearchParams, useFocusEffect } from "expo-router";
 import { useAuth } from '@/contexts/UserContext';
 import supabase from '@/api/supabaseClient';
@@ -167,102 +172,112 @@ export default function AddMedicationScreen() {
   };
 
   return (
+    <KeyboardAvoidingView
+    className="flex-1 bg-white"
+    behavior={Platform.OS === "ios" ? "padding" : "height"}
+    keyboardVerticalOffset={80} // Adjust based on header height
+    >
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <ScrollView contentContainerStyle={{ padding: 24, flexGrow: 1, justifyContent: "center" }}>
     <View className="flex-1 px-6 py-8 bg-white">
       <Text className="text-2xl font-bold mb-4">Add Medication</Text>
 
       {/* Name Input & Scan Button */}
       <View className="flex-row justify-between items-center mb-2">
-        <Text className="text-lg font-semibold">Name</Text>
-        <TouchableOpacity
-          className="px-3 py-1 border border-gray-400 rounded"
-          onPress={() =>
-            router.push({
-              pathname: "/(tabs)/profile/CameraScreen",
-              params: {
-                name,
-                dosage,
-                description,
-                frequencyDetails,
-              },
-            })
-          }
-        >
-          <Text>Scan</Text>
-        </TouchableOpacity>
+      <Text className="text-lg font-semibold">Name</Text>
+      <TouchableOpacity
+        className="px-3 py-1 border border-gray-400 rounded"
+        onPress={() =>
+        router.push({
+          pathname: "/(tabs)/profile/CameraScreen",
+          params: {
+          name,
+          dosage,
+          description,
+          frequencyDetails,
+          },
+        })
+        }
+      >
+        <Text>Scan</Text>
+      </TouchableOpacity>
       </View>
 
       <TextInput
-        className="border border-gray-300 rounded px-3 py-2 mb-4"
-        placeholder="e.g. Tylenol"
-        value={name}
-        onChangeText={setName}
+      className="border border-gray-300 rounded px-3 py-2 mb-4"
+      placeholder="e.g. Tylenol"
+      value={name}
+      onChangeText={setName}
       />
 
       {/* Frequency Selector */}
       <Text className="text-lg font-semibold mb-1">Frequency</Text>
 
       <Pressable
-        className="border border-gray-300 rounded px-3 py-2 mb-4"
-        onPress={() =>
-          router.push({
-            pathname: "/(tabs)/profile/Frequency",
-            params: {
-              name,
-              dosage,
-              description,
-            },
-          })
-        }
+      className="border border-gray-300 rounded px-3 py-2 mb-4"
+      onPress={() =>
+        router.push({
+        pathname: "/(tabs)/profile/Frequency",
+        params: {
+          name,
+          dosage,
+          description,
+        },
+        })
+      }
       >
-        <Text>{formatFrequencySummary()}</Text>
+      <Text>{formatFrequencySummary()}</Text>
       </Pressable>
 
       <Text className="text-lg font-semibold mb-1">Time of Day</Text>
       <View className="border border-gray-300 rounded px-3 py-2 mb-10 bg-white">
-        <DateTimePicker
-          value={time}
-          mode="time"
-          display="default"
-          onChange={(_, selectedTime) => {
-            if (selectedTime) setTime(selectedTime);
-          }}
-        />
+      <DateTimePicker
+        value={time}
+        mode="time"
+        display="default"
+        onChange={(_, selectedTime) => {
+        if (selectedTime) setTime(selectedTime);
+        }}
+      />
       </View>
 
 
       {/* Dosage Input */}
       <Text className="text-lg font-semibold mb-1">Dosage</Text>
       <TextInput
-        className="border border-gray-300 rounded px-3 py-2 mb-10"
-        placeholder="e.g. 2 pills"
-        value={dosage}
-        onChangeText={setDosage}
+      className="border border-gray-300 rounded px-3 py-2 mb-10"
+      placeholder="e.g. 2 pills"
+      value={dosage}
+      onChangeText={setDosage}
       />
 
       {/* Description Input */}
       <Text className="text-lg font-semibold mb-1">Description</Text>
       <TextInput
-        className="border border-gray-300 rounded px-3 py-2 mb-10"
-        placeholder="e.g. Take with food"
-        value={description}
-        onChangeText={setDescription}
-        multiline
-        numberOfLines={4}
-        textAlignVertical="top"
+      className="border border-gray-300 rounded px-3 py-2 mb-10"
+      placeholder="e.g. Take with food"
+      value={description}
+      onChangeText={setDescription}
+      multiline
+      numberOfLines={4}
+      textAlignVertical="top"
       />
 
       {/* Buttons */}
       <View className="flex-row justify-end space-x-6">
-        <Pressable onPress={handleCancel} className="px-4 py-2">
-          <Text className="text-gray-600 text-lg">Cancel</Text>
-        </Pressable>
-        <Pressable
-          onPress={handleDone}
-          className="bg-green-600 px-5 py-2 rounded-full"
-        >
-          <Text className="text-white font-semibold text-lg">Done</Text>
-        </Pressable>
+      <Pressable onPress={handleCancel} className="px-4 py-2">
+        <Text className="text-gray-600 text-lg">Cancel</Text>
+      </Pressable>
+      <Pressable
+        onPress={handleDone}
+        className="bg-green-600 px-5 py-2 rounded-full"
+      >
+        <Text className="text-white font-semibold text-lg">Done</Text>
+      </Pressable>
       </View>
     </View>
+    </ScrollView>
+    </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }
