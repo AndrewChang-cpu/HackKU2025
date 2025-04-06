@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, SafeAreaView, Text, ScrollView, TouchableOpacity } from 'react-native';
 import dayjs from 'dayjs';
 import supabase from '@/api/supabaseClient';
 import { useAuth } from '@/contexts/UserContext';
@@ -113,7 +113,7 @@ export default function DashbaordScreen() {
   const todaysMeds = getTodaysMedications();
 
   return (
-    <View className="flex-1 bg-[#e3fcef] px-4 pt-8">
+    <SafeAreaView className="flex-1 bg-[#e3fcef] px-4 pt-8">
       <Text className="text-3xl font-bold mb-4">Hi {user.name}</Text>
 
       {nextMed ? (
@@ -169,6 +169,6 @@ export default function DashbaordScreen() {
   ))}
 </ScrollView>
 
-    </View>
+    </SafeAreaView>
   );
 }

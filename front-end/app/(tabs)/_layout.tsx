@@ -9,11 +9,24 @@ export default function TabLayout() {
                 name="index"
                 options={{
                     title: 'Dashboard',
-                    icon: ''
+                    icon: 'home',
+                    headerShown: false
                 }}
             />
-            <Tabs.Screen name="scanner"/>
-            <Tabs.Screen name="profile"/>
+            <Tabs.Screen name="documents"
+                options={{
+                    title: 'Documents',
+                    icon: 'scanner',
+                    headerShown: false
+                }}
+            />
+            <Tabs.Screen name="profile"
+                options={{
+                    title: 'Profile',
+                    icon: 'profile',
+                    headerShown: false
+                }}
+            />
         </Tabs>
     );
 }
