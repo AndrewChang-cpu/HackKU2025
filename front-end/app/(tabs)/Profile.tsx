@@ -135,7 +135,8 @@ export default function Profile() {
             className={`mb-3 rounded-md ${med.taken ? 'bg-gray-300' : 'bg-white shadow-md'}`}
           >
             <View className="flex-row items-center p-4">
-              <View className="w-[70px] items-center pr-2">
+              {/* Increased width of the left view */}
+              <View className="w-[100px] items-center pr-2">
                 <Text className="text-xl font-bold">
                   {timeToDate(med.time).format('h:mm A')}
                 </Text>
