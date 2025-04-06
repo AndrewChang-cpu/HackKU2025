@@ -23,7 +23,7 @@ export default function CameraScreen() {
     console.log('UPC:', typeof data, data);
     console.log(Object.keys(upcNdcMap).includes("0" + data))
   
-console.log('Scanned UPC:', data);
+    console.log('Scanned UPC:', data);
       const matchedNdc = (upcNdcMap as Record<string, string>)["0" + data];
   
       if (!matchedNdc) {
@@ -37,11 +37,16 @@ console.log('Scanned UPC:', data);
       const result = await response.json();
   
       const ndcName = result.results?.[0]?.generic_name || 'Unknown Drug';
+      let description = 'Labeler: ' + result.results?.[0]?.labeler_name || 'Unknown Labeler';
+      description += '\nBrand Name: ' + result.results?.[0]?.brand_name || 'Unknown Brand';
+      description += '\nDosage Form: ' + result.results?.[0]?.dosage_form || 'Unknown Dosage Form';
+      description += '\nDetails: ' + result.results?.[0]?.packaging?.[0]?.description || 'Unknown Details';
   
       navigation.navigate('AddMedicationScreen', {
         scanned: data,
         name: ndcName,
-        dosage: '2 pills',
+        dosage: '',
+        description: description,
       });
     
   };

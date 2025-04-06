@@ -1,6 +1,7 @@
 import { useRoute } from '@react-navigation/native';
 import { View, Text, Button } from 'react-native';
 import { useEffect, useState } from 'react';
+import AddMedicationScreen from '../AddMedicationScreen';
 
 export default function HomeScreen({ navigation }) {
   const route = useRoute();

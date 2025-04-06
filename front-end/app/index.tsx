@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 // import HomeScreen from './(tabs)/home';
 import DocumentCameraScreen from './DocumentCameraScreen';
 import { useEffect } from 'react';
+import AddMedicationScreen from './AddMedicationScreen';
 
 export default function WelcomeScreen() {
   const router = useRouter();
@@ -15,6 +16,7 @@ export default function WelcomeScreen() {
   //   return () => clearTimeout(timeout);
   // }, []);
   // return null
+  // return <AddMedicationScreen />;
   return (
     <View className="flex-1 bg-[#e3fcef] items-center justify-center px-6">
       <Text className="text-3xl font-semibold mb-12">Welcome!</Text>

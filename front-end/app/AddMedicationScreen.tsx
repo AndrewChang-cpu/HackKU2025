@@ -12,8 +12,19 @@ import {
   useFocusEffect,
 } from "@react-navigation/native";
 import { useRouter } from "expo-router";
+import { useAuth } from '@/contexts/UserContext';
+import supabase from '@/api/supabaseClient';
+import dayjs from 'dayjs';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isSameOrBefore);
+
 
 export default function AddMedicationScreen() {
+  const { user }= useAuth();
+
   const navigation = useNavigation();
   const route = useRoute();
   const router = useRouter();
@@ -38,6 +49,9 @@ export default function AddMedicationScreen() {
       }
       if (route.params?.dosage !== undefined) {
         setDosage(route.params.dosage);
+      }
+      if (route.params?.description !== undefined) {
+        setDescription(route.params.description);
       }
     }, [route.params])
   );
@@ -75,14 +89,82 @@ export default function AddMedicationScreen() {
     navigation.goBack();
   };
 
-  const handleDone = () => {
-    const formData = {
+  const handleDone = async () => {
+    const shortDays = ["Su", "M", "T", "W", "Th", "F", "Sa"];
+    if (!frequencyDetails) {
+      alert("Please set frequency.");
+      return;
+    }
+  
+    const { every, unit, days, startDate, endDate } = frequencyDetails;
+  
+    if (!user) {
+      alert("You must be signed in.");
+      return;
+    }
+  
+    // Generate all valid dates with 00:00:00 time
+    const start = dayjs(startDate).startOf('day');
+    const end = dayjs(endDate).startOf('day');
+    let generatedDates: string[] = [];
+  
+    if (unit === 'day') {
+      let d = start;
+      while (d.isSameOrBefore(end)) {
+        generatedDates.push(d.toISOString());
+        d = d.add(Number(every), 'day');
+      }
+    } else if (unit === 'week') {
+      let weekStart = start;
+        console.log('run1')
+      while (weekStart.isSameOrBefore(end)) {
+        console.log('run')
+        for (const dayIndex of days) {
+          const offset = (dayIndex - weekStart.day() + 7) % 7;
+          const target = weekStart.add(offset, 'day').startOf('day');
+          if (target.isSameOrAfter(start) && target.isSameOrBefore(end)) {
+            generatedDates.push(target.toISOString());
+          }
+        }
+        weekStart = weekStart.add(Number(every), 'week');
+      }
+    }
+  
+    // Remove duplicates and sort
+    const uniqueSortedDates = [...new Set(generatedDates)].sort();
+  
+    // Convert day indices to labels (e.g., 0 → "Su", 1 → "M", etc.)
+    const dayLabels = Array.isArray(days)
+      ? days.map((i: number) => shortDays[i])
+      : [];
+
+    console.log('inserting', {
+      user_id: user.id,
       name,
       dosage,
-      frequencyDetails,
-    };
-    console.log("Submit:", formData); // Replace with a call to Supabase or any handler
-    navigation.goBack(); // Or navigate to confirmation screen
+      description,
+      days: dayLabels,
+      dates: uniqueSortedDates,
+    })
+
+    const { error } = await supabase.from("medications").insert([
+      {
+        user_id: user.id,
+        name: name,
+        dosage,
+        description,
+        days: dayLabels,
+        dates: uniqueSortedDates,
+      },
+    ]);
+  
+    if (error) {
+      console.error("Supabase insert error:", error);
+      alert("Failed to save medication.");
+    } else {
+      console.log("Medication saved successfully.");
+      router.push("/(tabs)/Profile")
+    }
   };
 
   return (
@@ -96,10 +178,11 @@ export default function AddMedicationScreen() {
           className="px-3 py-1 border border-gray-400 rounded"
           onPress={() =>
             router.push({
-              pathname: "/(tabs)/CameraScreen",
+              pathname: "/CameraScreen",
               params: {
                 name,
                 dosage,
+                description,
                 frequencyDetails,
               },
             })
@@ -126,6 +209,7 @@ export default function AddMedicationScreen() {
             frequencyDetails,
             name,
             dosage,
+            description,
           })
         }
       >

@@ -23,6 +23,7 @@ import {
 	const initialFrequency = route.params?.frequencyDetails;
 	const name = route.params?.name || "";
 	const dosage = route.params?.dosage || "";
+	const description = route.params?.description || "";
   
 	const [repeatNum, setRepeatNum] = useState(initialFrequency?.every || "1");
 	const [unit, setUnit] = useState<"day" | "week">(initialFrequency?.unit || "week");
@@ -57,6 +58,7 @@ import {
 		name,
 		dosage,
 		frequencyDetails: data,
+		description
 	  });
 	};
   

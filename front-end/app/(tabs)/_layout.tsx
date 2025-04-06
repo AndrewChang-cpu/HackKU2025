@@ -19,7 +19,6 @@ export default function TabLayout() {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName = 'home-outline';
           let label = 'Tab';
-          console.log('ROUTE NAME', route.name)
 
           if (route.name === 'Home') {
             iconName = 'home-outline';
