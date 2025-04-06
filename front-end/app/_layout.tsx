@@ -74,6 +74,13 @@ export default function RootLayout() {
               name='login'
               options={{ headerShown: false }}
             />
+            <Stack.Screen
+              name='(tabs)'
+              options={{  
+                headerShown: false,
+                gestureEnabled: false
+              }}
+            />
           </Stack>
         </View>
       </AuthWrapper>
