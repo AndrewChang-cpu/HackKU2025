@@ -30,6 +30,12 @@ export default function ProfileStackLayout() {
                 }}
             />
             <Stack.Screen 
+                name='documents'
+                options={{
+                    headerShown: false,
+                }}
+            />
+            <Stack.Screen 
                 name='DocumentCameraScreen'
                 options={{
                     headerShown: false,
