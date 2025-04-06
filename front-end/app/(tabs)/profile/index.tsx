@@ -14,9 +14,9 @@ export default function ProfileScreen() {
                     onPress={() => {router.push('/')}}
                 />
                 <ProfileItem 
-                    title='Update allergies'
+                    title='Update allergens'
                     icon='document-text-outline'
-                    onPress={() => {router.push('/')}}
+                    onPress={() => {router.push('/profile/allergens')}}
                 />
                 <ProfileItem 
                     title='Logout'
