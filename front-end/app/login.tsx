@@ -23,9 +23,9 @@ export default function LoginScreen() {
 
 		if (error) {
 			console.log('invalid signin info')
+		} else {
+			router.push('/(tabs)');
 		}
-
-		router.push('/(tabs)');
 
 	};
 
