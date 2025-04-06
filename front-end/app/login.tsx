@@ -1,14 +1,33 @@
 import { useState, useEffect } from 'react';
 import { ImageBackground } from 'react-native';
 import { View, Text, Button, TextField } from 'react-native-ui-lib';
-import { Link } from 'expo-router';
+import { useRouter, Link } from 'expo-router';
 import BottomButton from '@/components/BottomButton';
 import Heading from '@/components/Heading';
+import supabase from '@/api/supabaseClient';
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [emailFocus, setEmailFocue] = useState(false);
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+	const [emailFocus, setEmailFocue] = useState(false);
+
+	const router = useRouter();
+
+	const handleSignin = async () => {
+		console.log('hello world')
+		let { data, error } = await
+		supabase.auth.signInWithPassword({
+			email,
+			password
+		})
+
+		if (error) {
+			console.log('invalid signin info')
+		} else {
+			router.push('/(tabs)');
+		}
+
+	};
 
   return (
     <ImageBackground
@@ -28,6 +47,7 @@ export default function LoginScreen() {
           <View className="flex flex-col gap-3">
             <TextField
               placeholder="Email"
+			  onChangeText={setEmail}
               floatingPlaceholder
               floatOnFocus // The placeholder floats when focused or filled
               fieldStyle={{
@@ -41,6 +61,7 @@ export default function LoginScreen() {
               className="text-blue-600"
               secureTextEntry
               placeholder="Password"
+			  onChangeText={setPassword}
               floatingPlaceholder
               floatOnFocus
               fieldStyle={{
@@ -51,7 +72,7 @@ export default function LoginScreen() {
               containerStyle={{ width: 300 }}
             />
           </View>
-          <Button style={{ backgroundColor: '#5BD9C2' }} label="Login" />
+          <Button style={{ backgroundColor: '#5BD9C2' }} label="Login" onPress={handleSignin}/>
             <View className="flex flex-row gap-2 justify-center items-center">
             <Text>Don't have an account?</Text>
             <Link href="/signup">
@@ -61,9 +82,10 @@ export default function LoginScreen() {
         </View>
       </View>
 
-      {/* Bottom container (adjusted to not cover full screen) */}
+	  
+      {/* Bottom container (adjusted to not cover full screen) 
       <View className="absolute bottom-0 w-full z-50 flex flex-col gap-5 justify-end px-[20px] pb-[50px]">
-        <Button style={{ backgroundColor: '#5BD9C2' }} label="Login" />
+        <Button style={{ backgroundColor: '#5BD9C2' }} label="Login" onPress={handleSignin}/>
         <View className="flex flex-row gap-2 justify-center items-center">
           <Text>Don't have an account?</Text>
           <Link href="/signup">
@@ -71,6 +93,7 @@ export default function LoginScreen() {
           </Link>
         </View>
       </View>
+	  */}
     </ImageBackground>
   );
 }
