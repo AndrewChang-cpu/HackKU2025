@@ -1,90 +1,80 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import dayjs from 'dayjs';
-import supabase from '@/api/supabaseClient';
 import { useAuth } from '@/contexts/UserContext';
-
-// Uncomment and configure the following if/when using Supabase
-// const DUMMY_USER_ID = 'user-123';
+import supabase from '@/api/supabaseClient';
 
 export default function Profile() {
-  const { user } = useAuth();
-  console.log(user)
-  if(!user) {
-    console.log('NOOOOO')
-  }
+  const { user } = useAuth(); // Access the user from AuthContext
+  const [name, setName] = useState('User'); // Default to 'User'
   const [medications, setMedications] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
+  function timeToDate(time) {
+    return dayjs(`1970-01-01T${time}`)
+  }
+
   useEffect(() => {
-    const today = dayjs().format('YYYY-MM-DD');
+    const fetchUserName = async () => {
+      if (user) {
+        const { data, error } = await supabase
+          .from('users')
+          .select('first_name')
+          .eq('id', user.id)
+          .single();
 
-    const dummyData = [
-      {
-        id: '1',
-        user_id: 'dummy',
-        name: 'Tylenol',
-        dosage: '2 pills',
-        ndc: '12345-6789',
-        description: 'Used for pain relief',
-        days: [],
-        dates: [today],
-        time: dayjs().set('hour', 8).set('minute', 0).toISOString(),
-        taken: false,
-      },
-      {
-        id: '2',
-        user_id: 'dummy',
-        name: 'Vitamin D',
-        dosage: '1 tablet',
-        ndc: '55555-1234',
-        description: 'Daily vitamin supplement',
-        days: [],
-        dates: [today],
-        time: dayjs().set('hour', 12).set('minute', 0).toISOString(),
-        taken: false,
-      },
-      {
-        id: '3',
-        user_id: 'dummy',
-        name: 'Amoxicillin',
-        dosage: '500mg',
-        ndc: '98765-4321',
-        description: 'Antibiotic for infection',
-        days: [],
-        dates: [today],
-        time: dayjs().set('hour', 18).set('minute', 0).toISOString(),
-        taken: false,
-      },
-      {
-        id: '4',
-        user_id: 'dummy',
-        name: 'Melatonin',
-        dosage: '5mg',
-        ndc: '33333-7777',
-        description: 'Helps with sleep',
-        days: [],
-        dates: [today],
-        time: dayjs().set('hour', 22).set('minute', 0).toISOString(),
-        taken: false,
-      },
-    ];
+        if (error) {
+          console.error('Error fetching user name:', error);
+        } else {
+          setName(data?.first_name || 'User');
+        }
+      }
+    };
 
-    setMedications(dummyData);
-    setLoading(false);
-  }, []);
+    const fetchMedications = async () => {
+      if (user) {
+        try {
+          const { data, error } = await supabase
+            .from('medications')
+            .select('*')
+            .eq('user_id', user.id);
+
+          if (error) {
+            throw error;
+          }
+
+          // Add a local 'taken' flag to each medication
+          const medsWithTaken = data.map((med) => ({
+            ...med,
+            taken: false,
+          }));
+
+          setMedications(medsWithTaken);
+        } catch (err) {
+          console.error('Error fetching medications:', err);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchUserName();
+    fetchMedications();
+  }, [user]);
 
   function getTodaysMedications() {
     const today = dayjs().format('YYYY-MM-DD');
 
     const filtered = medications.filter((med) =>
-      med.dates?.some((date: string) => dayjs(date).format('YYYY-MM-DD') === today)
+      med.dates?.some((date: string) =>
+        dayjs(date).isSame(today, 'day') // Compare the date ignoring the time
+      )
     );
 
     const sorted = filtered.sort((a, b) => {
       if (a.taken && !b.taken) return 1;
       if (!a.taken && b.taken) return -1;
-      return dayjs(a.time).isAfter(dayjs(b.time)) ? 1 : -1;
+      return dayjs(timeToDate(a.time)).isAfter(dayjs(timeToDate(b.time))) ? 1 : -1;
     });
 
     return sorted;
@@ -117,7 +107,7 @@ export default function Profile() {
 
   return (
     <View className="flex-1 bg-[#e3fcef] px-4 pt-8">
-      <Text className="text-3xl font-bold mb-4">Hi {user.name}</Text>
+      <Text className="text-3xl font-bold mb-4">Hi {name}!</Text>
 
       {nextMed ? (
         <View className="mb-6 bg-white rounded-md p-4 shadow-md">
@@ -138,40 +128,32 @@ export default function Profile() {
       <Text className="text-xl font-bold mb-2">My Medications</Text>
 
       <ScrollView className="mb-4">
-  {todaysMeds.map((med) => (
-    <TouchableOpacity
-      key={med.id}
-      onPress={() => handleToggleMedication(med.id)}
-      className={`mb-3 rounded-md ${
-        med.taken ? 'bg-gray-300' : 'bg-white shadow-md'
-      }`}
-    >
-      <View className="flex-row items-center p-4">
-        {/* Time section */}
-        <View className="w-[70px] items-center pr-2">
-          <Text className="text-xl font-bold">
-            {dayjs(med.time).format('hA')}
-          </Text>
-        </View>
-
-        {/* Divider */}
-        <View className="w-[1px] bg-gray-300 h-full mx-2" />
-
-        {/* Info section */}
-        <View className="flex-1">
-          <Text className="text-base font-bold">{med.name}</Text>
-          <Text className="text-sm text-gray-700">{med.dosage}</Text>
-          <Text className="text-xs text-gray-500 mb-1">NDC: {med.ndc}</Text>
-          <Text className="text-sm text-gray-600">{med.description}</Text>
-          {med.taken && (
-            <Text className="text-green-700 font-bold mt-1">Taken</Text>
-          )}
-        </View>
-      </View>
-    </TouchableOpacity>
-  ))}
-</ScrollView>
-
+        {todaysMeds.map((med) => (
+          <TouchableOpacity
+            key={med.id}
+            onPress={() => handleToggleMedication(med.id)}
+            className={`mb-3 rounded-md ${med.taken ? 'bg-gray-300' : 'bg-white shadow-md'}`}
+          >
+            <View className="flex-row items-center p-4">
+              <View className="w-[70px] items-center pr-2">
+                <Text className="text-xl font-bold">
+                  {timeToDate(med.time).format('h:mm A')}
+                </Text>
+              </View>
+              <View className="w-[1px] bg-gray-300 h-full mx-2" />
+              <View className="flex-1">
+                <Text className="text-base font-bold">{med.name}</Text>
+                <Text className="text-sm text-gray-700">{med.dosage}</Text>
+                <Text className="text-xs text-gray-500 mb-1">NDC: {med.ndc}</Text>
+                <Text className="text-sm text-gray-600">{med.description}</Text>
+                {med.taken && (
+                  <Text className="text-green-700 font-bold mt-1">Taken</Text>
+                )}
+              </View>
+            </View>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
     </View>
   );
 }
