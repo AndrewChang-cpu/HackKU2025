@@ -165,7 +165,7 @@ export default function Frequency() {
             </Pressable>
             <Pressable
               onPress={handleDone}
-              className="bg-green-600 px-5 py-2 rounded-full"
+              className="bg-[#5BD9C2] px-5 py-2 rounded-full"
             >
               <Text className="text-white font-semibold text-lg">Done</Text>
             </Pressable>
