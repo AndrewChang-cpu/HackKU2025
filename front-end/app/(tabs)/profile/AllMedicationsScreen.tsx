@@ -2,6 +2,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useCallback, useState } from 'react';
 import {
   View,
+  SafeAreaView,
   Text,
   ScrollView,
   TouchableOpacity,
@@ -79,54 +80,56 @@ export default function AllMedicationsScreen() {
 
   return (
     <View className="flex-1 bg-white px-6 py-6">
-      <Text className="text-2xl font-bold mb-4">All Medications</Text>
+      <SafeAreaView>
+        <Text className="text-2xl font-bold mb-4">All Medications</Text>
 
-      <ScrollView className="mb-6">
-        {medications.length === 0 ? (
-          <Text className="text-gray-500">No medications found.</Text>
-        ) : (
-          medications.map((med) => {
-            const isExpanded = expandedId === med.id;
-            return (
-              <TouchableOpacity
-                key={med.id}
-                onPress={() => toggleExpand(med.id)}
-                className="mb-3 p-4 rounded-md bg-[#e3fcef] border border-green-200"
-              >
-                <Text className="text-lg font-bold">{med.name}</Text>
-                <Text className="text-sm text-gray-700">{med.dosage}</Text>
-                <Text className="text-sm text-gray-600 mb-1">
-                  {formatFrequency(med)}
-                </Text>
+        <ScrollView className="mb-6">
+          {medications.length === 0 ? (
+            <Text className="text-gray-500">No medications found.</Text>
+          ) : (
+            medications.map((med) => {
+              const isExpanded = expandedId === med.id;
+              return (
+                <TouchableOpacity
+                  key={med.id}
+                  onPress={() => toggleExpand(med.id)}
+                  className="mb-3 p-4 rounded-md bg-[#e3fcef] border border-green-200"
+                >
+                  <Text className="text-lg font-bold">{med.name}</Text>
+                  <Text className="text-sm text-gray-700">{med.dosage}</Text>
+                  <Text className="text-sm text-gray-600 mb-1">
+                    {formatFrequency(med)}
+                  </Text>
 
-                {isExpanded && (
-                  <>
-                    <View className="h-[1px] bg-gray-300 my-2" />
-                    <Text className="text-sm text-gray-700 mb-3">
-                      {med.description || 'No description.'}
-                    </Text>
-                    <Pressable
-                      onPress={() => handleDelete(med.id)}
-                      className="bg-red-600 px-4 py-2 rounded-full items-center self-start"
-                    >
-                      <Text className="text-white font-semibold text-sm">
-                        Delete
+                  {isExpanded && (
+                    <>
+                      <View className="h-[1px] bg-gray-300 my-2" />
+                      <Text className="text-sm text-gray-700 mb-3">
+                        {med.description || 'No description.'}
                       </Text>
-                    </Pressable>
-                  </>
-                )}
-              </TouchableOpacity>
-            );
-          })
-        )}
-      </ScrollView>
+                      <Pressable
+                        onPress={() => handleDelete(med.id)}
+                        className="bg-red-600 px-4 py-2 rounded-full items-center self-start"
+                      >
+                        <Text className="text-white font-semibold text-sm">
+                          Delete
+                        </Text>
+                      </Pressable>
+                    </>
+                  )}
+                </TouchableOpacity>
+              );
+            })
+          )}
+        </ScrollView>
 
-      <Pressable
-        onPress={() => router.push('/(tabs)/profile/AddMedicationScreen')}
-        className="bg-[#5BD9C2] py-3 rounded-full items-center"
-      >
-        <Text className="text-white text-lg font-semibold">+ Add Medication</Text>
-      </Pressable>
+        <Pressable
+          onPress={() => router.push('/(tabs)/profile/AddMedicationScreen')}
+          className="bg-[#5BD9C2] py-3 rounded-full items-center"
+        >
+          <Text className="text-white text-lg font-semibold">+ Add Medication</Text>
+        </Pressable>
+        </SafeAreaView>
     </View>
   );
 }

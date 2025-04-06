@@ -24,7 +24,7 @@ export default function ProfileStackLayout() {
                 }}
             />
             <Stack.Screen 
-                name='AllMedicationScreen'
+                name='AllMedicationsScreen'
                 options={{
                     headerShown: false,
                 }}
@@ -37,6 +37,12 @@ export default function ProfileStackLayout() {
             />
             <Stack.Screen 
                 name='DocumentCameraScreen'
+                options={{
+                    headerShown: false,
+                }}
+            />
+            <Stack.Screen 
+                name='CameraScreen'
                 options={{
                     headerShown: false,
                 }}
