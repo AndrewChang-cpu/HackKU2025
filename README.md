@@ -1,1 +1,1 @@
-# HackKU2025
+Midnight Implementation
