@@ -73,7 +73,7 @@ export default function DocumentsScreen() {
   };
 
   return (
-    <View className="flex-1 bg-[#e3fcef] px-4 pt-8">
+    <View className="flex-1 bg-[#e3fcef] px-4 pt-16">
       <Text className="text-2xl font-bold mb-4">My Documents</Text>
 
       <ScrollView className="mb-4">
