@@ -56,6 +56,8 @@ export default function Frequency() {
       endDate,
     };
 
+	console.log('HANDLE DONE', data)
+
     router.push({
       pathname: "/(tabs)/profile/AddMedicationScreen",
       params: {

@@ -1,5 +1,5 @@
-import { useRoute } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import { useRoute, useFocusEffect  } from '@react-navigation/native';
+import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import dayjs from 'dayjs';
 import { useAuth } from '@/contexts/UserContext';
@@ -15,53 +15,53 @@ export default function DashboardScreen() {
     return dayjs(`1970-01-01T${time}`)
   }
 
-  useEffect(() => {
-    const fetchUserName = async () => {
-      if (user) {
-        const { data, error } = await supabase
-          .from('users')
-          .select('first_name')
-          .eq('id', user.id)
-          .single();
-
-        if (error) {
-          console.error('Error fetching user name:', error);
-        } else {
-          setName(data?.first_name || 'User');
-        }
-      }
-    };
-
-    const fetchMedications = async () => {
-      if (user) {
-        try {
+  useFocusEffect(
+    useCallback(() => {
+      const fetchUserName = async () => {
+        if (user) {
           const { data, error } = await supabase
-            .from('medications')
-            .select('*')
-            .eq('user_id', user.id);
-
+            .from('users')
+            .select('first_name')
+            .eq('id', user.id)
+            .single();
+  
           if (error) {
-            throw error;
+            console.error('Error fetching user name:', error);
+          } else {
+            setName(data?.first_name || 'User');
           }
-
-          // Add a local 'taken' flag to each medication
-          const medsWithTaken = data.map((med) => ({
-            ...med,
-            taken: false,
-          }));
-
-          setMedications(medsWithTaken);
-        } catch (err) {
-          console.error('Error fetching medications:', err);
-        } finally {
-          setLoading(false);
         }
-      }
-    };
-
-    fetchUserName();
-    fetchMedications();
-  }, [user]);
+      };
+  
+      const fetchMedications = async () => {
+        if (user) {
+          setLoading(true); // Ensure loading state on every focus
+          try {
+            const { data, error } = await supabase
+              .from('medications')
+              .select('*')
+              .eq('user_id', user.id);
+  
+            if (error) throw error;
+  
+            const medsWithTaken = data.map((med) => ({
+              ...med,
+              taken: false,
+            }));
+  
+            setMedications(medsWithTaken);
+          } catch (err) {
+            console.error('Error fetching medications:', err);
+          } finally {
+            setLoading(false);
+          }
+        }
+      };
+  
+      fetchUserName();
+      fetchMedications();
+    }, [user])
+  );
 
   function getTodaysMedications() {
     const today = dayjs().format('YYYY-MM-DD');
@@ -77,14 +77,15 @@ export default function DashboardScreen() {
       if (!a.taken && b.taken) return -1;
       return dayjs(timeToDate(a.time)).isAfter(dayjs(timeToDate(b.time))) ? 1 : -1;
     });
-
+    console.log('FILETERED', filtered);
     return sorted;
   }
 
   function getNextUpcoming() {
     const now = dayjs();
+    console.log(now)
     const todaysMeds = getTodaysMedications();
-    return todaysMeds.find((m) => !m.taken && dayjs(m.time).isAfter(now));
+    return todaysMeds[0];
   }
 
   function handleToggleMedication(medId: string) {
@@ -115,7 +116,7 @@ export default function DashboardScreen() {
           <Text className="text-lg font-semibold mb-1">Next Medication</Text>
           <Text className="text-base font-bold">{nextMed.name}</Text>
           <Text className="text-sm text-gray-700 mb-1">
-            {nextMed.dosage} • {dayjs(nextMed.time).format('h:mm A')}
+            {nextMed.dosage} • {timeToDate(nextMed.time).format('h:mm A')}
           </Text>
           <Text className="text-xs text-gray-500">NDC: {nextMed.ndc}</Text>
           <Text className="text-sm text-gray-600">{nextMed.description}</Text>

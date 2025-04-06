@@ -5,13 +5,14 @@ import {
   TextInput,
   TouchableOpacity,
   Pressable,
-} from "react-native";
+  Platform } from "react-native";
 import { useRouter, useLocalSearchParams, useFocusEffect } from "expo-router";
 import { useAuth } from '@/contexts/UserContext';
 import supabase from '@/api/supabaseClient';
 import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -21,38 +22,44 @@ export default function AddMedicationScreen() {
   const router = useRouter();
   const params = useLocalSearchParams(); // Replace useRoute with useLocalSearchParams
 
+  const [time, setTime] = useState<Date>(new Date());
   const [name, setName] = useState("");
   const [dosage, setDosage] = useState("");
   const [description, setDescription] = useState("");
   const [frequencyDetails, setFrequencyDetails] = useState<any>(null);
+  const [initialized, setInitialized] = useState(false); // Track initialization
 
   useFocusEffect(
     useCallback(() => {
-      if (params?.scanned) {
-        setName(String(params.scanned));
-      }
+      if (!initialized) {
+        if (params?.scanned) {
+          setName(String(params.scanned));
+        }
 
-      if (params?.frequencyDetails) {
-        setFrequencyDetails(params.frequencyDetails);
-      }
+        if (params?.frequencyDetails) {
+          setFrequencyDetails(JSON.parse(String(params.frequencyDetails)));
+          console.log("RECEIVED Frequency details:", params.frequencyDetails);
+        }
 
-      if (params?.name !== undefined) {
-        setName(String(params.name));
+        if (params?.name !== undefined) {
+          setName(String(params.name));
+        }
+        if (params?.dosage !== undefined) {
+          setDosage(String(params.dosage));
+        }
+        if (params?.description !== undefined) {
+          setDescription(String(params.description));
+        }
+
+        setInitialized(true); // Mark as initialized
       }
-      if (params?.dosage !== undefined) {
-        setDosage(String(params.dosage));
-      }
-      if (params?.description !== undefined) {
-        setDescription(String(params.description));
-      }
-    }, [params])
+    }, [params, initialized])
   );
 
   const formatFrequencySummary = () => {
     if (!frequencyDetails) return "Select frequency";
 
     const { every, unit, days, startDate, endDate } = frequencyDetails;
-
     const shortDays = ["Su", "M", "T", "W", "Th", "F", "Sa"];
 
     const formatDate = (d: string | Date) =>
@@ -78,7 +85,7 @@ export default function AddMedicationScreen() {
   };
 
   const handleCancel = () => {
-    router.push("/(tabs)");
+    router.push("/(tabs)/profile");
   };
 
   const handleDone = async () => {
@@ -122,6 +129,7 @@ export default function AddMedicationScreen() {
 
     // Remove duplicates and sort
     const uniqueSortedDates = [...new Set(generatedDates)].sort();
+    const timeString = dayjs(time).format("HH:mm:ss"); // Store as "08:30", "14:00", etc.
 
     // Convert day indices to labels (e.g., 0 → "Su", 1 → "M", etc.)
     const dayLabels = Array.isArray(days)
@@ -145,6 +153,7 @@ export default function AddMedicationScreen() {
         description,
         days: dayLabels,
         dates: uniqueSortedDates,
+        time: timeString,
       },
     ]);
   
@@ -153,7 +162,7 @@ export default function AddMedicationScreen() {
       alert("Failed to save medication.");
     } else {
       console.log("Medication saved successfully.");
-      router.push("/(tabs)");
+      router.push("/(tabs)/profile");
     }
   };
 
@@ -198,7 +207,6 @@ export default function AddMedicationScreen() {
           router.push({
             pathname: "/(tabs)/profile/Frequency",
             params: {
-              frequencyDetails,
               name,
               dosage,
               description,
@@ -208,6 +216,19 @@ export default function AddMedicationScreen() {
       >
         <Text>{formatFrequencySummary()}</Text>
       </Pressable>
+
+      <Text className="text-lg font-semibold mb-1">Time of Day</Text>
+      <View className="border border-gray-300 rounded px-3 py-2 mb-10 bg-white">
+        <DateTimePicker
+          value={time}
+          mode="time"
+          display="default"
+          onChange={(_, selectedTime) => {
+            if (selectedTime) setTime(selectedTime);
+          }}
+        />
+      </View>
+
 
       {/* Dosage Input */}
       <Text className="text-lg font-semibold mb-1">Dosage</Text>
