@@ -19,18 +19,16 @@ export default function TabLayout() {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName = 'home-outline';
           let label = 'Tab';
-        
-          if (route.name === 'home') {
+          console.log('ROUTE NAME', route.name)
+
+          if (route.name === 'Home') {
             iconName = 'home-outline';
             label = 'Home';
-          } else if (route.name === 'CameraScreen') {
-            iconName = 'camera-outline';
-            label = 'Scan';
-          } else if (route.name === 'profile') {
+          } else if (route.name === 'Profile') {
             iconName = 'person-outline';
             label = 'Profile';
           }
-        
+
           return (
             <View style={{ alignItems: 'center', justifyContent: 'center', width: 60 }}>
               <Ionicons
@@ -51,12 +49,11 @@ export default function TabLayout() {
               </Text>
             </View>
           );
-        },        
+        },
       })}
     >
-      <Tabs.Screen name="home" />
-      <Tabs.Screen name="CameraScreen" />
-      <Tabs.Screen name="profile" />
+      <Tabs.Screen name="Home" />
+      <Tabs.Screen name="Profile" />
     </Tabs>
   );
 }
