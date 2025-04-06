@@ -6,12 +6,7 @@ import {
   TouchableOpacity,
   Pressable,
 } from "react-native";
-import {
-  useNavigation,
-  useRoute,
-  useFocusEffect,
-} from "@react-navigation/native";
-import { useRouter } from "expo-router";
+import { useRouter, useLocalSearchParams, useFocusEffect } from "expo-router";
 import { useAuth } from '@/contexts/UserContext';
 import supabase from '@/api/supabaseClient';
 import dayjs from 'dayjs';
@@ -21,13 +16,10 @@ import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 
-
 export default function AddMedicationScreen() {
-  const { user }= useAuth();
-
-  const navigation = useNavigation();
-  const route = useRoute();
+  const { user } = useAuth();
   const router = useRouter();
+  const params = useLocalSearchParams(); // Replace useRoute with useLocalSearchParams
 
   const [name, setName] = useState("");
   const [dosage, setDosage] = useState("");
@@ -36,24 +28,24 @@ export default function AddMedicationScreen() {
 
   useFocusEffect(
     useCallback(() => {
-      if (route.params?.scanned) {
-        setName(route.params.scanned);
+      if (params?.scanned) {
+        setName(String(params.scanned));
       }
 
-      if (route.params?.frequencyDetails) {
-        setFrequencyDetails(route.params.frequencyDetails);
+      if (params?.frequencyDetails) {
+        setFrequencyDetails(params.frequencyDetails);
       }
 
-      if (route.params?.name !== undefined) {
-        setName(route.params.name);
+      if (params?.name !== undefined) {
+        setName(String(params.name));
       }
-      if (route.params?.dosage !== undefined) {
-        setDosage(route.params.dosage);
+      if (params?.dosage !== undefined) {
+        setDosage(String(params.dosage));
       }
-      if (route.params?.description !== undefined) {
-        setDescription(route.params.description);
+      if (params?.description !== undefined) {
+        setDescription(String(params.description));
       }
-    }, [route.params])
+    }, [params])
   );
 
   const formatFrequencySummary = () => {
@@ -86,7 +78,7 @@ export default function AddMedicationScreen() {
   };
 
   const handleCancel = () => {
-    navigation.goBack();
+    router.push("/(tabs)");
   };
 
   const handleDone = async () => {
@@ -95,19 +87,19 @@ export default function AddMedicationScreen() {
       alert("Please set frequency.");
       return;
     }
-  
+
     const { every, unit, days, startDate, endDate } = frequencyDetails;
-  
+
     if (!user) {
       alert("You must be signed in.");
       return;
     }
-  
+
     // Generate all valid dates with 00:00:00 time
     const start = dayjs(startDate).startOf('day');
     const end = dayjs(endDate).startOf('day');
     let generatedDates: string[] = [];
-  
+
     if (unit === 'day') {
       let d = start;
       while (d.isSameOrBefore(end)) {
@@ -116,9 +108,7 @@ export default function AddMedicationScreen() {
       }
     } else if (unit === 'week') {
       let weekStart = start;
-        console.log('run1')
       while (weekStart.isSameOrBefore(end)) {
-        console.log('run')
         for (const dayIndex of days) {
           const offset = (dayIndex - weekStart.day() + 7) % 7;
           const target = weekStart.add(offset, 'day').startOf('day');
@@ -129,10 +119,10 @@ export default function AddMedicationScreen() {
         weekStart = weekStart.add(Number(every), 'week');
       }
     }
-  
+
     // Remove duplicates and sort
     const uniqueSortedDates = [...new Set(generatedDates)].sort();
-  
+
     // Convert day indices to labels (e.g., 0 → "Su", 1 → "M", etc.)
     const dayLabels = Array.isArray(days)
       ? days.map((i: number) => shortDays[i])
@@ -145,7 +135,7 @@ export default function AddMedicationScreen() {
       description,
       days: dayLabels,
       dates: uniqueSortedDates,
-    })
+    });
 
     const { error } = await supabase.from("medications").insert([
       {
@@ -163,7 +153,7 @@ export default function AddMedicationScreen() {
       alert("Failed to save medication.");
     } else {
       console.log("Medication saved successfully.");
-      router.push("/(tabs)/Profile")
+      router.push("/(tabs)");
     }
   };
 
@@ -178,7 +168,7 @@ export default function AddMedicationScreen() {
           className="px-3 py-1 border border-gray-400 rounded"
           onPress={() =>
             router.push({
-              pathname: "/CameraScreen",
+              pathname: "/(tabs)/profile/CameraScreen",
               params: {
                 name,
                 dosage,
@@ -205,11 +195,14 @@ export default function AddMedicationScreen() {
       <Pressable
         className="border border-gray-300 rounded px-3 py-2 mb-4"
         onPress={() =>
-          navigation.navigate("Frequency", {
-            frequencyDetails,
-            name,
-            dosage,
-            description,
+          router.push({
+            pathname: "/(tabs)/profile/Frequency",
+            params: {
+              frequencyDetails,
+              name,
+              dosage,
+              description,
+            },
           })
         }
       >

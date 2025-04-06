@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router';
 // import HomeScreen from './(tabs)/home';
 import DocumentCameraScreen from './DocumentCameraScreen';
 import { useEffect } from 'react';
-import AddMedicationScreen from './AddMedicationScreen';
+import AddMedicationScreen from './(tabs)/profile/AddMedicationScreen';
 
 export default function WelcomeScreen() {
   const router = useRouter();

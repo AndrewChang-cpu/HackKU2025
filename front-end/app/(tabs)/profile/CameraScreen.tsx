@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
 import { Asset } from 'expo-asset';
 import * as FileSystem from 'expo-file-system';
-import upcNdcMap from '../assets/upc_ndc_mapping.json';
+import upcNdcMap from '../../../assets/upc_ndc_mapping.json';
 
 export default function CameraScreen() {
   const [permission, requestPermission] = useCameraPermissions();
