@@ -1,18 +1,16 @@
 export const Allergies = [
-    { value: 'Peanuts', label: 'Peanuts' },
-    { value: 'Tree Nuts', label: 'Tree Nuts' },
-    { value: 'Milk', label: 'Milk' },
-    { value: 'Eggs', label: 'Eggs' },
-    { value: 'Soy', label: 'Soy' },
-    { value: 'Wheat', label: 'Wheat' },
-    { value: 'Fish', label: 'Fish' },
-    { value: 'Shellfish', label: 'Shellfish' },
-    { value: 'Penicillin and Related Antibiotics', label: 'Penicillin and Related Antibiotics' },
-    { value: 'Cephalosporins', label: 'Cephalosporins' },
-    { value: 'Sulfa Drugs', label: 'Sulfa Drugs' },
-    { value: 'NSAIDs', label: 'NSAIDs' },
-    { value: 'Anticonvulsants', label: 'Anticonvulsants' },
-    { value: 'Contrast Dyes', label: 'Contrast Dyes' }
-  ];
-  
-  
+  { value: 'peanuts', label: 'peanuts' },
+  { value: 'tree nuts', label: 'tree nuts' },
+  { value: 'milk', label: 'milk' },
+  { value: 'eggs', label: 'eggs' },
+  { value: 'soy', label: 'soy' },
+  { value: 'wheat', label: 'wheat' },
+  { value: 'fish', label: 'fish' },
+  { value: 'shellfish', label: 'shellfish' },
+  { value: 'penicillin and related antibiotics', label: 'penicillin and related antibiotics' },
+  { value: 'cephalosporins', label: 'cephalosporins' },
+  { value: 'sulfa drugs', label: 'sulfa drugs' },
+  { value: 'nsaids', label: 'nsaids' },
+  { value: 'anticonvulsants', label: 'anticonvulsants' },
+  { value: 'contrast dyes', label: 'contrast dyes' }
+];

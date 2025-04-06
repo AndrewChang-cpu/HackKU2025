@@ -1,39 +1,39 @@
+import React from 'react';
 import { TouchableOpacity } from 'react-native';
-import { View, Text, Pressable } from 'react-native';
+import { View, SafeAreaView, ImageBackground, Text, Image } from 'react-native';
 import { useRouter } from 'expo-router';
-// import HomeScreen from './(tabs)/home';
-import DocumentCameraScreen from './DocumentCameraScreen';
-import { useEffect } from 'react';
-import AddMedicationScreen from './(tabs)/profile/AddMedicationScreen';
 
 export default function WelcomeScreen() {
   const router = useRouter();
-  // useEffect(() => {
-  //   // Immediately navigate to Profile on load
-  //   const timeout = setTimeout(() => {
-  //     router.replace('/(tabs)/Profile');
-  //   }, 100);
-  //   return () => clearTimeout(timeout);
-  // }, []);
-  // return null
-  // return <AddMedicationScreen />;
-  return (
-    <View className="flex-1 bg-[#e3fcef] items-center justify-center px-6">
-      <Text className="text-3xl font-semibold mb-12">Welcome!</Text>
 
+  return (
+    <ImageBackground
+      source={require('../assets/backgrounds/bg1.png')}
+      style={{ flex: 1 }}
+      resizeMode="cover"
+    >
+
+      <SafeAreaView className='flex justify-center items-center mt-[150px]'>
+        <Image
+          source={require('../assets/logo/black-logo.png')}
+        />
+      </SafeAreaView>
+      <View className='flex justify-end pl-[200px]'>
+        <Image
+          source={require('../assets/goose/goose1.png')}
+        />
+      </View>
+      <View className="items-center justify-center px-6">
+        <Text className="text-3xl font-semibold mb-12">Welcome!</Text>
+      </View>
+
+      {/* Button positioned 60px from the bottom with left and right margins */}
       <TouchableOpacity
-        className="w-full py-3 px-6 mb-4 bg-white rounded-full border border-black shadow-lg items-center"
+        className="absolute bottom-[60px] left-6 right-6 py-3 px-6 bg-white rounded-full border border-black shadow-lg items-center"
         onPress={() => router.push('/login')}
       >
-        <Text className="text-lg">Log in</Text>
+        <Text className="text-lg">Get Started</Text>
       </TouchableOpacity>
-
-      <Pressable
-        className="w-full py-3 px-6 bg-white rounded-full border border-black shadow-lg items-center"
-        onPress={() => router.push('/(tabs)')}
-      >
-        <Text className="text-lg">Sign up</Text>
-      </Pressable>
-    </View>
+    </ImageBackground>
   );
 }
