@@ -7,14 +7,14 @@ import { useEffect } from 'react';
 
 export default function Index() {
   const router = useRouter();
-  useEffect(() => {
-    // Immediately navigate to Profile on load
-    const timeout = setTimeout(() => {
-      router.replace('/(tabs)/Profile');
-    }, 100);
-    return () => clearTimeout(timeout);
-  }, []);
-  return null
+  // useEffect(() => {
+  //   // Immediately navigate to Profile on load
+  //   const timeout = setTimeout(() => {
+  //     router.replace('/(tabs)/Profile');
+  //   }, 100);
+  //   return () => clearTimeout(timeout);
+  // }, []);
+  // return null
   return (
     <View className="flex-1 bg-[#e3fcef] items-center justify-center px-6">
       <Text className="text-3xl font-semibold mb-12">Welcome!</Text>
@@ -28,7 +28,7 @@ export default function Index() {
 
       <Pressable
         className="w-full py-3 px-6 bg-white rounded-full border border-black shadow-lg items-center"
-        onPress={() => router.push('/home')}
+        onPress={() => router.push('/Home')}
       >
         <Text className="text-lg">Sign up</Text>
       </Pressable>
