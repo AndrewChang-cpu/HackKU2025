@@ -26,6 +26,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       setLoading(false);
     };
 
+    
+
     fetchUser();
 
     // Listen for auth changes

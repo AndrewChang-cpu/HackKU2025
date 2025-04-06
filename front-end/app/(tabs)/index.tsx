@@ -1,6 +1,6 @@
 import { useRoute, useFocusEffect  } from '@react-navigation/native';
 import React, { useEffect, useState, useCallback } from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
 import dayjs from 'dayjs';
 import { useAuth } from '@/contexts/UserContext';
 import supabase from '@/api/supabaseClient';
@@ -109,8 +109,18 @@ export default function DashboardScreen() {
 
   return (
     <View className="flex-1 bg-[#e3fcef] px-4 pt-16">
-      <Text className="text-3xl font-bold mb-4">Hi {name}!</Text>
-
+      <View
+        className="absolute z-20 top-[65px] left-[50px] right-6 py-3 px-6"
+      >
+        <Text className="text-3xl font-bold mb-4">Hi {name}!</Text>
+      </View>
+      <View>
+          <Image
+            source={require('../../assets/goose/goose-speech.png')}
+            //style={{ width: 150, height: 150 }}
+            resizeMode="contain"
+          />
+      </View>
       {nextMed ? (
         <View className="mb-6 bg-white rounded-md p-4 shadow-md">
           <Text className="text-lg font-semibold mb-1">Next Medication</Text>
