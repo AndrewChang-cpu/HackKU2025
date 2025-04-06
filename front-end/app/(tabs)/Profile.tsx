@@ -1,41 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import dayjs from 'dayjs';
+import supabase from '@/api/supabaseClient';
+import { useAuth } from '@/contexts/UserContext';
 
 // Uncomment and configure the following if/when using Supabase
-// import { createClient } from '@supabase/supabase-js';
-// const supabaseUrl = 'https://your-project.supabase.co';
-// const supabaseAnonKey = 'YOUR_SUPABASE_ANON_KEY';
-// const supabase = createClient(supabaseUrl, supabaseAnonKey);
 // const DUMMY_USER_ID = 'user-123';
 
 export default function Profile() {
+  const { user } = useAuth();
+  console.log(user)
+  if(!user) {
+    console.log('NOOOOO')
+  }
   const [medications, setMedications] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const today = dayjs().format('YYYY-MM-DD');
-
-    // ----------------------------
-    // SUPABASE CODE (Commented out for now)
-    // async function fetchMedications() {
-    //   try {
-    //     const { data, error } = await supabase
-    //       .from('medications')
-    //       .select('*')
-    //       .eq('user_id', DUMMY_USER_ID);
-    //     if (error) throw error;
-    //     // Add a local 'taken' flag to each medication
-    //     const medsWithTaken = data.map((med) => ({ ...med, taken: false }));
-    //     setMedications(medsWithTaken);
-    //   } catch (err) {
-    //     console.error('Error fetching medications:', err);
-    //   } finally {
-    //     setLoading(false);
-    //   }
-    // }
-    // fetchMedications();
-    // ----------------------------
 
     const dummyData = [
       {
@@ -135,7 +117,7 @@ export default function Profile() {
 
   return (
     <View className="flex-1 bg-[#e3fcef] px-4 pt-8">
-      <Text className="text-3xl font-bold mb-4">Hi Dummy Name!</Text>
+      <Text className="text-3xl font-bold mb-4">Hi {user.name}</Text>
 
       {nextMed ? (
         <View className="mb-6 bg-white rounded-md p-4 shadow-md">
