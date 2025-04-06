@@ -1,6 +1,6 @@
-import { View, Text } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import { useFonts } from 'expo-font';
-import { Slot, useRouter, useSegments } from 'expo-router';
+import { Slot, useRouter, useSegments, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { UserProvider, useAuth } from '@/contexts/UserContext';
@@ -65,7 +65,16 @@ export default function RootLayout() {
     <UserProvider>
       <AuthWrapper>
         <View className="flex-1">
-          <Slot />
+          <Stack>
+            <Stack.Screen
+              name='index'
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name='login'
+              options={{ headerShown: false }}
+            />
+          </Stack>
         </View>
       </AuthWrapper>
     </UserProvider>
