@@ -1,62 +1,68 @@
-import { Tabs } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import { Text, View } from 'react-native';
+import { Tabs } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import { Text, View } from "react-native";
 
 export default function TabLayout() {
-  return (
+    return (
     <Tabs
-      screenOptions={({ route }) => ({
+        screenOptions={({ route }) => ({
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: 'white',
-          height: 70,
-          paddingBottom: 8,
-          paddingTop: 8,
-          borderTopWidth: 1,
-          borderColor: '#ccc',
+            backgroundColor: "white",
+            height: 70,
+            paddingBottom: 8,
+            paddingTop: 8,
+            borderTopWidth: 1,
+            borderColor: "#ccc",
         },
         tabBarShowLabel: false,
         tabBarIcon: ({ focused, color, size }) => {
-          let iconName = 'home-outline';
-          let label = 'Tab';
-        
-          if (route.name === 'home') {
-            iconName = 'home-outline';
-            label = 'Home';
-          } else if (route.name === 'CameraScreen') {
-            iconName = 'camera-outline';
-            label = 'Scan';
-          } else if (route.name === 'profile') {
-            iconName = 'person-outline';
-            label = 'Profile';
-          }
-        
-          return (
-            <View style={{ alignItems: 'center', justifyContent: 'center', width: 60 }}>
-              <Ionicons
+            let iconName = "home-outline";
+            let label = "Tab";
+
+            if (route.name === "home") {
+            iconName = "home-outline";
+            label = "Home";
+            } else if (route.name === "CameraScreen") {
+            iconName = "camera-outline";
+            label = "Scan";
+            } else if (route.name === "profile") {
+            iconName = "person-outline";
+            label = "Profile";
+            }
+
+            return (
+            <View
+                style={{
+                alignItems: "center",
+                justifyContent: "center",
+                width: 60,
+                }}
+            >
+                <Ionicons
                 name={iconName}
                 size={22}
-                color={focused ? 'black' : '#aaa'}
-              />
-              <Text
+                color={focused ? "black" : "#aaa"}
+                />
+                <Text
                 style={{
-                  fontSize: 12,
-                  color: focused ? 'black' : '#aaa',
-                  marginTop: 2,
+                    fontSize: 12,
+                    color: focused ? "black" : "#aaa",
+                    marginTop: 2,
                 }}
                 numberOfLines={1}
                 ellipsizeMode="tail"
-              >
+                >
                 {label}
-              </Text>
+                </Text>
             </View>
-          );
-        },        
-      })}
+            );
+        },
+        })}
     >
-      <Tabs.Screen name="home" />
-      <Tabs.Screen name="CameraScreen" />
-      <Tabs.Screen name="profile" />
+        <Tabs.Screen name="home" />
+        <Tabs.Screen name="CameraScreen" />
+        <Tabs.Screen name="profile" />
     </Tabs>
-  );
+    );
 }
