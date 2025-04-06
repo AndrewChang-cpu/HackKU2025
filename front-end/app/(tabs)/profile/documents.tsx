@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
+  SafeAreaView,
   Text,
   ScrollView,
   TouchableOpacity,
@@ -13,6 +14,7 @@ import {
 import { useRouter } from 'expo-router';
 import { useAuth } from '@/contexts/UserContext';
 import supabase from '@/api/supabaseClient';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function DocumentsScreen() {
   const { user } = useAuth();
@@ -21,7 +23,7 @@ export default function DocumentsScreen() {
   const [selectedDoc, setSelectedDoc] = useState<any>(null);
   const [renameModalVisible, setRenameModalVisible] = useState(false);
   const [newFileName, setNewFileName] = useState('');
-  const [fullScreenImage, setFullScreenImage] = useState<string | null>(null); // ✅ NEW
+  const [fullScreenImage, setFullScreenImage] = useState<string | null>(null);
 
   const fetchDocuments = async () => {
     if (!user) return;
@@ -74,14 +76,11 @@ export default function DocumentsScreen() {
 
   return (
     <View className="flex-1 bg-[#e3fcef] px-4 pt-8">
-      <Text className="text-2xl font-bold mb-4">My Documents</Text>
+      <Text className="text-2xl font-bold mb-4 mt-[50px]">My Documents</Text>
 
       <ScrollView className="mb-4">
         {documents.map((doc) => (
-          <View
-            key={doc.id}
-            className="mb-3 bg-white p-4 rounded-lg shadow-md"
-          >
+          <View key={doc.id} className="mb-3 bg-white p-4 rounded-lg shadow-md">
             <Text className="text-lg font-semibold mb-2">{doc.file_name}</Text>
 
             {doc.image_base64 && (
@@ -96,7 +95,7 @@ export default function DocumentsScreen() {
 
             <View className="flex-row mt-3 justify-between">
               <TouchableOpacity
-                className="bg-yellow-400 px-3 py-2 rounded"
+                className="bg-[#5BD9C2] px-3 py-2 rounded"
                 onPress={() => openRenameModal(doc)}
               >
                 <Text>Rename</Text>
@@ -125,10 +124,10 @@ export default function DocumentsScreen() {
         ))}
 
         <TouchableOpacity
-          className="mt-6 bg-green-600 py-3 px-6 rounded-full self-center mb-12"
+          className="mt-6 bg-[#8833FF] py-3 px-6 rounded-full self-center mb-12 flex-row justify-center items-center"
           onPress={() => router.push('/(tabs)/profile/DocumentCameraScreen')}
         >
-          <Text className="text-white font-semibold text-lg">Add Document</Text>
+          <Ionicons name="add-outline" size={28} color="white" />
         </TouchableOpacity>
       </ScrollView>
 

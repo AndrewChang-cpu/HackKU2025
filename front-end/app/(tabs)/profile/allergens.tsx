@@ -57,22 +57,29 @@ export default function AllergensScreen() {
     }
 
     return (
-        <SafeAreaView className="flex-1 p-4 px-[50px]">
-            <Text className="text-xl font-bold mb-4">Select Your Allergies</Text>
-            {Allergies.map((item) => (
-                <View key={item.value} className="flex-row items-center mb-3">
-                    <Checkbox
-                        value={selectedAllergies.includes(item.value)}
-                        onValueChange={() => toggleAllergy(item.value)}
-                        color="blue"
-                    />
-                    <Text className="ml-2 text-base">{item.label}</Text>
-                </View>
-            ))}
-            <Text className="mt-5 text-lg font-bold">
-                Selected Allergies: {selectedAllergies.join(', ')}
-            </Text>
-            <Button className="bg-[#5BD9C2]" label="Save" onPress={handleSave} />
+        <SafeAreaView className="flex-1">
+            <View className='mx-[40px] mt-[40px]'>
+                <Text className="text-xl font-bold mb-4">Select Your Allergies</Text>
+                {Allergies.map((item) => (
+                    <View key={item.value} className="flex-row items-center mb-3">
+                        <Checkbox
+                            value={selectedAllergies.includes(item.value)}
+                            onValueChange={() => toggleAllergy(item.value)}
+                            color="blue"
+                        />
+                        <Text className="ml-2 text-base">{item.label}</Text>
+                    </View>
+                ))}
+                <Text className="mt-5 text-lg font-bold pb-[20px]">
+                    Selected Allergies: {selectedAllergies.join(', ')}
+                </Text>
+                
+            </View>
+            <View
+                className="absolute bottom-[25px] left-6 right-6 py-3 px-6"
+            >
+                <Button className="bg-[#5BD9C2] w-full" label="Save" onPress={handleSave} />
+            </View>
         </SafeAreaView>
     );
 }

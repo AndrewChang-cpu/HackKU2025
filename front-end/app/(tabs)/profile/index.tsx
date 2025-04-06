@@ -27,9 +27,9 @@ export default function ProfileScreen() {
     }, [])
 
   return (
-    <SafeAreaView className="flex-1 bg-[#e3fcef] px-4 py-4">
-      <Text className="text-4xl font-bold text-center mb-8">{name}</Text>
-      <View className="space-y-4">
+    <SafeAreaView className="flex-1 bg-[#e3fcef] px-[] py-4">
+      <Text className="text-4xl font-bold text-center mb-8 mt-[20px]">{name}</Text>
+      <View className="rounded-[20px] gap-[20px] mx-[20px] bg-white">
         <ProfileItem 
           title="Medications"
           icon="document-text-outline"

@@ -123,7 +123,7 @@ export default function AllMedicationsScreen() {
 
       <Pressable
         onPress={() => router.push('/(tabs)/profile/AddMedicationScreen')}
-        className="bg-green-600 py-3 rounded-full items-center"
+        className="bg-[#5BD9C2] py-3 rounded-full items-center"
       >
         <Text className="text-white text-lg font-semibold">+ Add Medication</Text>
       </Pressable>

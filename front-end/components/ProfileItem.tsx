@@ -12,7 +12,7 @@ export default function ProfileItem({ title, icon, onPress }: ProfileItemProps) 
   return (
     <TouchableOpacity
       onPress={onPress}
-      className="flex-row items-center justify-between bg-white p-4 rounded-lg shadow-md"
+      className="flex-row items-center justify-between bg-white p-4 rounded-lg shadow-sm"
     >
       <View className="flex-row items-center space-x-3">
         <Ionicons name={icon} size={28} color="black" />
