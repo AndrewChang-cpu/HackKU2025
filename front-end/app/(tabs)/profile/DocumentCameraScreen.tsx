@@ -1,14 +1,21 @@
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
 import { useRef, useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Image, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
+import supabase from '@/api/supabaseClient';
+import { useAuth } from '@/contexts/UserContext';
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
 
-export default function DocumentCaptureScreen() {
+export default function DocumentCameraScreen() {
   const [permission, requestPermission] = useCameraPermissions();
-  const cameraRef = useRef(null);
+  const cameraRef = useRef<CameraView | null>(null);
   const [capturedUri, setCapturedUri] = useState<string | null>(null);
-  const navigation = useNavigation();
+
+  const router = useRouter();
+  const { user } = useAuth();
 
   useEffect(() => {
     if (permission?.status !== 'granted') {
@@ -35,21 +42,35 @@ export default function DocumentCaptureScreen() {
   };
 
   const handleSubmit = async () => {
-    if (!capturedUri) return;
+    if (!capturedUri || !user) return;
 
-    // TODO: implement actual submit logic
-    await submitDocument(capturedUri);
-    navigation.navigate('Profile'); // Go back to Profile screen
-  };
+    try {
+      const fileExt = capturedUri.split('.').pop() || 'jpg';
+      const fileName = `${uuidv4()}.${fileExt}`;
 
-  const submitDocument = async (uri: string) => {
-    console.log('Submitting image:', uri);
-    // Placeholder for upload / save logic
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Read image as base64
+      const base64Data = await FileSystem.readAsStringAsync(capturedUri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+
+      // Upload to Supabase documents table
+      const { error } = await supabase.from('documents').insert({
+        user_id: user.id,
+        file_name: fileName,
+        file_data: base64Data,
+      });
+
+      if (error) throw error;
+
+      router.push('/(tabs)/profile/documents');
+    } catch (err: any) {
+      console.error('Upload failed:', err);
+      Alert.alert('Upload Failed', err.message || 'An error occurred while uploading.');
+    }
   };
 
   const handleBack = () => {
-    navigation.navigate('Profile');
+    router.push('/(tabs)/profile/documents');
   };
 
   const reset = () => setCapturedUri(null);

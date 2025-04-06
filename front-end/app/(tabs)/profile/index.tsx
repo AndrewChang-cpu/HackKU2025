@@ -19,6 +19,11 @@ export default function ProfileScreen() {
                     onPress={() => {router.push('/profile/allergens')}}
                 />
                 <ProfileItem 
+                    title='Documents'
+                    icon='document-text-outline'
+                    onPress={() => {router.push('/profile/documents')}}
+                />
+                <ProfileItem 
                     title='Logout'
                     icon='exit-outline'
                     onPress={() => {router.push('/')}}

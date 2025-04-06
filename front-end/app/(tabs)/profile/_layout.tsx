@@ -22,6 +22,18 @@ export default function ProfileStackLayout() {
                     headerShown: false,
                 }}
             />
+            <Stack.Screen 
+                name='AllMedicationScreen'
+                options={{
+                    headerShown: false,
+                }}
+            />
+            <Stack.Screen 
+                name='DocumentCameraScreen'
+                options={{
+                    headerShown: false,
+                }}
+            />
         </Stack>
     );
 }
