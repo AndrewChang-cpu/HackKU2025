@@ -23,8 +23,11 @@ export default function WelcomeScreen() {
           source={require('../assets/goose/goose1.png')}
         />
       </View>
-      <View className="items-center justify-center px-6">
-        <Text className="text-3xl font-semibold mb-12">Welcome!</Text>
+      <View className="pl-[80px] text-left justify-center px-6 mt-[-70px] gap-3">
+        <Text className="text-6xl font-bold">Don't</Text>
+        <Text className="text-6xl font-bold">forget to</Text>
+        <Text className="text-6xl font-bold">take care of</Text>
+        <Text className="text-6xl font-bold">yourself!</Text>
       </View>
 
       {/* Button positioned 60px from the bottom with left and right margins */}
